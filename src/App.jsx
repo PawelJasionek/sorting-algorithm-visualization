@@ -12,7 +12,7 @@ function App() {
   const generateNumbers = () =>{
     const numbers = [];
     for(let i=50; i>=1; i--){
-      numbers.push(i);
+      numbers.push({value: i, isCurrent: false, isLowest: false});
     }
 
     setColumns(numbers);
@@ -23,7 +23,7 @@ function App() {
   }, [])
 
   const generateColumns = () => {
-    const tempColumns = columns.map(col => <Column value={col} />)
+    const tempColumns = columns.map(col => <Column {...col} />)
 
     return tempColumns;
 }
@@ -33,16 +33,17 @@ const generatedColumns = useMemo(()=> {
 }, [columns])
 
   const changeColumns = (newColumns) => {
-    setColumns(newColumns);
-    console.log("cos")
+    setColumns(prevColumns => [...newColumns]);
   }
 
   return (
     <main className='main-container'>
-      <label>
+      <label className='algorithm-label'>
         Pick a fruit
         <select name="selectedAlgorithm" onChange={e => setAlgorithm(e.target.value)}>
             <option value="selectionSort"> Selection Sort </option>
+            <option value="bubbleSort"> Bubble Sort </option>
+            <option value="quickSort"> Quick Sort </option>
         </select>
       </label>
       <button
