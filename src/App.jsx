@@ -18,22 +18,22 @@ function App() {
     setColumns(numbers);
   }
 
+  useEffect(() =>{
+    generateNumbers()
+  }, [])
+
   const generateColumns = () => {
-    return columns.map(col => <Column value={col} />)
+    const tempColumns = columns.map(col => <Column value={col} />)
+
+    return tempColumns;
 }
 
-useEffect(()=>{
-  generateNumbers();
-}, [])
+const generatedColumns = useMemo(()=> {
+  return generateColumns()
+}, [columns])
 
-const generatedColumns = useMemo(()=> generateColumns(), [columns])
-
-
-
-
-
-  const changeColumns = (columns) => {
-    setColumns(columns);
+  const changeColumns = (newColumns) => {
+    setColumns(newColumns);
     console.log("cos")
   }
 

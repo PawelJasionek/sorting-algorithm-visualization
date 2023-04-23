@@ -1,14 +1,14 @@
 import React from "react"
 
-export default function Column({number}){
+export default function Column({value}){
     const styles={
-        height: `${number*2}%`
+        height: `${value*2}%`
     }
-console.log(number)
+console.log(value)
 
     return (
         <div className="column" style={styles}>
-                {number}
+                {value}
         </div>
     )
 }
