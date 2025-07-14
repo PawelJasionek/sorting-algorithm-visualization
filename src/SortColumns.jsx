@@ -1,7 +1,7 @@
 
 let changeColumnsFunction;
 let sleep = (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms * 10))
+    return new Promise(resolve => setTimeout(resolve, ms * 1000))
 }
 
 export default async function sortColumns(algorithm, oldColumns, changeColumns) {
@@ -54,6 +54,7 @@ async function selectionSort(oldColumns) {
 
         oldColumns[i].isLowest = false;
         oldColumns[i].isCurrent = false;
+        oldColumns[lowest].isCurrent = false;
         changeColumnsFunction([...oldColumns])
 
         oldColumns[i].isCurrent = false;
@@ -85,7 +86,7 @@ async function bubbleSort(oldColumns) {
 
 
             } else {
-                await sleep(10);
+                await sleep(1);
                 [oldColumns[j].isLowest, oldColumns[j].isCurrent] = [true, false]
                 changeColumnsFunction([...oldColumns])
                 await sleep(1);
@@ -126,6 +127,9 @@ async function quickSort(oldColumns, start = 0, end = oldColumns.length - 1) {
 
         if (oldColumns[j].value < pivotValue) {
             oldColumns[j].isLowest = true;
+            changeColumnsFunction(oldColumns.map(c => ({ ...c })));
+            await sleep(1);
+
             [oldColumns[i], oldColumns[j]] = [oldColumns[j], oldColumns[i]];
 
 
