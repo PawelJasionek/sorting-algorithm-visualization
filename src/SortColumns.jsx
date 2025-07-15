@@ -1,7 +1,7 @@
 
 let changeColumnsFunction;
 let sleep = (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms * 1000))
+    return new Promise(resolve => setTimeout(resolve, ms*500))
 }
 
 export default async function sortColumns(algorithm, oldColumns, changeColumns) {
@@ -16,6 +16,9 @@ export default async function sortColumns(algorithm, oldColumns, changeColumns) 
             break;
         case "quickSort":
             await quickSort(oldColumns)
+            break;
+        case "insertionSort":
+            await insertionSort(oldColumns);
             break;
     }
 
@@ -117,7 +120,7 @@ async function quickSort(oldColumns, start = 0, end = oldColumns.length - 1) {
     changeColumnsFunction(oldColumns.map(c => ({ ...c })));
     await sleep(1);
 
-    let i = start + 1;
+    let i = start+1;
 
     for (let j = start + 1; j <= end; j++) {
         oldColumns[j].isCurrent = true;
@@ -148,7 +151,7 @@ async function quickSort(oldColumns, start = 0, end = oldColumns.length - 1) {
     }
 
 
-    const newPivotIndex = i - 1;
+    const newPivotIndex = oldColumns.length == 2 ? i : i-1;
     oldColumns[pivotIndex].isPivot = false;
 
     [oldColumns[pivotIndex], oldColumns[newPivotIndex]] = [oldColumns[newPivotIndex], oldColumns[pivotIndex]];
@@ -161,4 +164,41 @@ async function quickSort(oldColumns, start = 0, end = oldColumns.length - 1) {
 
     await quickSort(oldColumns, newPivotIndex + 1, end)
 
+}
+
+
+async function insertionSort(oldColumns){
+
+    for(let i = 1; i < oldColumns.length; i++ ){
+        let key = {...oldColumns[i]};
+        let j = i-1;
+        oldColumns[i].isCurrent = true;
+        if (j >= 0) oldColumns[j].isCurrent = true;
+        changeColumnsFunction([...oldColumns]);
+        await sleep(3);
+
+        while(j >= 0 && oldColumns[j].value > key.value ){
+
+                oldColumns[j].isCurrent = true;
+                oldColumns[j+1] = {...oldColumns[j]};
+                oldColumns[j].value = 0;
+                changeColumnsFunction([...oldColumns]);
+                await sleep(1);
+
+                j--;
+                oldColumns = oldColumns.map(col => ({...col, isCurrent: false, isLowest:false}));
+                changeColumnsFunction([...oldColumns]);
+
+        }
+
+         j >= 0 && (oldColumns[j].isLowest = true);
+        changeColumnsFunction([...oldColumns])
+        await sleep(3);
+
+        oldColumns[j+1] = {...key};
+        oldColumns = oldColumns.map(col => ({...col, isCurrent: false, isLowest:false}));
+        changeColumnsFunction([...oldColumns]);
+        await sleep(1);
+
+    }
 }

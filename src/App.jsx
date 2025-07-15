@@ -35,6 +35,7 @@ function App() {
         <select name="selectedAlgorithm" onChange={e => setAlgorithm(e.target.value)}>
           <option value="selectionSort"> Selection Sort </option>
           <option value="bubbleSort"> Bubble Sort </option>
+          <option value="insertionSort"> Insertion Sort </option>
           <option value="quickSort"> Quick Sort </option>
         </select>
       </label>
