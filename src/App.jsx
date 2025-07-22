@@ -37,6 +37,7 @@ function App() {
           <option value="bubbleSort"> Bubble Sort </option>
           <option value="insertionSort"> Insertion Sort </option>
           <option value="quickSort"> Quick Sort </option>
+          <option value="mergeSort"> Merge Sort </option>
         </select>
       </label>
       <button

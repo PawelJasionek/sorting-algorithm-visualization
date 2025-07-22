@@ -1,7 +1,9 @@
 
 let changeColumnsFunction;
 let sleep = (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms))
+    return new Promise(resolve => setTimeout(resolve, ms * 200
+
+    ))
 }
 
 export default async function sortColumns(algorithm, oldColumns, changeColumns) {
@@ -19,6 +21,9 @@ export default async function sortColumns(algorithm, oldColumns, changeColumns) 
             break;
         case "insertionSort":
             await insertionSort(oldColumns);
+            break;
+        case "mergeSort":
+            await mergeSort(oldColumns);
             break;
     }
 
@@ -201,4 +206,67 @@ async function insertionSort(oldColumns) {
         await sleep(1);
 
     }
+}
+
+async function mergeSort(columns, start = 0, end = columns.length - 1) {
+
+    if (start >= end) return;
+    let mid = Math.floor(start + (end - start) / 2);
+    await mergeSort(columns, start, mid);
+    await mergeSort(columns, mid + 1, end);
+    await merge(columns, start, mid, end);
+
+
+
+    async function merge(columns, start, mid, end) {
+        let merged = [];
+        let i = start;
+        let j = mid + 1;
+
+        while (i <= mid && j <= end) {
+            columns[i].isCurrent = true;
+            columns[j].isCurrent = true;
+            changeColumnsFunction([...columns]);
+            await sleep(1);
+
+            if (columns[i].value < columns[j].value) {
+                columns[i].isLowest = true;
+                changeColumnsFunction([...columns]);
+                await sleep(1);
+                merged.push(columns[i]);
+                i++;
+            } else {
+                columns[j].isLowest = true;
+                changeColumnsFunction([...columns]);
+                await sleep(1);
+                merged.push(columns[j]);
+                j++;
+            }
+            columns.forEach(col => {
+                col.isCurrent = false
+                col.isLowest = false
+            });
+        }
+
+        while (i <= mid) {
+            merged.push(columns[i]);
+            i++;
+        }
+
+        while (j <= end) {
+            merged.push(columns[j]);
+            j++;
+        }
+
+        for (let i = 0; i < merged.length; i++) {
+            columns[start + i] = merged[i];
+            columns[start + i].isCurrent = true;
+            changeColumnsFunction([...columns]);
+            await sleep(1);
+            columns[start + i].isCurrent = false;
+        }
+    }
+
+
+
 }
